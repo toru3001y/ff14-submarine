@@ -73,7 +73,7 @@ export default function App() {
           onCommit={commitRankInput}
         />
 
-        <table className="grid">
+        <table className="grid grid--bonus">
           <caption className="visually-hidden">ランクボーナス</caption>
           <thead>
             <tr>

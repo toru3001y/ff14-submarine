@@ -163,12 +163,22 @@ body {
   border-collapse: collapse;
 }
 
+/* 01 のランクボーナスは行見出し・セレクトの列を持たないため、幅いっぱいに広げると
+   左に空白が生まれ、1列目の左罫線が浮いて見える。内容幅にして右へ寄せ、
+   02 の値列と右端を揃える。 */
+.grid--bonus {
+  width: auto;
+  margin-left: auto;
+}
+
 .grid__head {
   padding: 0 0 8px 20px;
   font-size: 12px;
   font-weight: 500;
   color: var(--text-muted);
   text-align: right;
+  /* 幅が詰まったとき「コ ス ト」のように縦に折り返さないようにする */
+  white-space: nowrap;
 }
 
 /* 値は mono（数字が等幅）。項目名は日本語を含むため sans（SPEC §5.4） */
