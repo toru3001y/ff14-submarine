@@ -65,30 +65,33 @@ export default function App() {
           潜水艦ランク
         </h2>
 
-        <RankField
-          value={rankInput}
-          errorMessage={viewModel.rank.errorMessage}
-          ariaInvalid={viewModel.rank.ariaInvalid}
-          onValueChange={setRankInput}
-          onCommit={commitRankInput}
-        />
+        {/* 見出し・ランク入力・ランクボーナスの3ブロックを横一列に並べ、上端を揃える */}
+        <div className="section__body">
+          <RankField
+            value={rankInput}
+            errorMessage={viewModel.rank.errorMessage}
+            ariaInvalid={viewModel.rank.ariaInvalid}
+            onValueChange={setRankInput}
+            onCommit={commitRankInput}
+          />
 
-        <table className="grid grid--bonus">
-          <caption className="visually-hidden">ランクボーナス</caption>
-          <thead>
-            <tr>
-              <th className="grid__head" scope="col">
-                {CAPACITY_LABEL}
-              </th>
-              <StatColumnHeaders />
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <StatGrid grid={viewModel.rank.bonusGrid} />
-            </tr>
-          </tbody>
-        </table>
+          <table className="grid grid--bonus">
+            <caption className="visually-hidden">ランクボーナス</caption>
+            <thead>
+              <tr>
+                <th className="grid__head grid__lead" scope="col">
+                  {CAPACITY_LABEL}
+                </th>
+                <StatColumnHeaders />
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <StatGrid grid={viewModel.rank.bonusGrid} />
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section className="section" aria-labelledby="section-parts">
@@ -111,7 +114,7 @@ export default function App() {
               <th scope="col">
                 <span className="visually-hidden">パーツ</span>
               </th>
-              <th className="grid__head" scope="col">
+              <th className="grid__head grid__lead" scope="col">
                 {COST_LABEL}
               </th>
               <StatColumnHeaders />
