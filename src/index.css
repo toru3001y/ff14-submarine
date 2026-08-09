@@ -203,7 +203,8 @@ body {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
-  text-align: right;
+  /* 値は桁を揃えるため右寄せ、項目名は列の中央に置く */
+  text-align: center;
   /* 幅が詰まったとき「コ ス ト」のように縦に折り返さないようにする */
   white-space: nowrap;
   /* 項目名の行もグリッドに含める。部位名・セレクトの列には罫線を引かない */
