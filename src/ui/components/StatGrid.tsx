@@ -19,8 +19,7 @@ export function cellClassName(cell: Cell): string {
 export function StatGrid({ grid }: { readonly grid: MiniGrid }) {
   return (
     <>
-      {/* 1列目は左罫線を引かない（grid__lead）。グリッドの左辺は開けておく */}
-      <td className={`${cellClassName(grid.leading)} grid__lead`}>{grid.leading.text}</td>
+      <td className={cellClassName(grid.leading)}>{grid.leading.text}</td>
       {STAT_KEYS.map((key) => (
         <td key={key} className={cellClassName(grid.stats[key])}>
           {grid.stats[key].text}

@@ -79,7 +79,7 @@ export default function App() {
             <caption className="visually-hidden">ランクボーナス</caption>
             <thead>
               <tr>
-                <th className="grid__head grid__lead" scope="col">
+                <th className="grid__head" scope="col">
                   {CAPACITY_LABEL}
                 </th>
                 <StatColumnHeaders />
@@ -114,7 +114,7 @@ export default function App() {
               <th scope="col">
                 <span className="visually-hidden">パーツ</span>
               </th>
-              <th className="grid__head grid__lead" scope="col">
+              <th className="grid__head" scope="col">
                 {COST_LABEL}
               </th>
               <StatColumnHeaders />

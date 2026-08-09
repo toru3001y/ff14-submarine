@@ -201,12 +201,7 @@ body {
   border-left: 1px solid var(--rule);
 }
 
-/* グリッドの左辺は開けておく（コスト／キャパシティの左側には線を引かない） */
-.grid .grid__lead {
-  border-left: none;
-}
-
-/* 右端（運の右）と下端（艦橋の下）を閉じる */
+/* 左端（コスト／キャパシティの左）・右端（運の右）・下端（艦橋の下）を閉じる */
 .grid__head:last-child,
 .grid .value:last-child {
   border-right: 1px solid var(--rule);
