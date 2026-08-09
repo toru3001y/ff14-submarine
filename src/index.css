@@ -75,11 +75,14 @@ body {
 /* ---- セクション ---- */
 
 /* セクション01・02 は「見出し列 / 内容列」の2列。境界線は --ink（SPEC §5.1） */
+/* baseline で揃えると、左の見出しが右側の表のベースラインに引っ張られて下がり、
+   セクション内の要素の高さが不揃いに見える。上端で揃える。 */
 .section {
   display: grid;
   grid-template-columns: 180px 1fr;
   column-gap: 24px;
-  align-items: baseline;
+  row-gap: 20px;
+  align-items: start;
   padding: 28px 0;
   border-top: 1px solid var(--ink);
 }
@@ -159,7 +162,6 @@ body {
 
 .grid {
   width: 100%;
-  margin-top: 18px;
   border-collapse: collapse;
 }
 
@@ -171,9 +173,11 @@ body {
   margin-left: auto;
 }
 
+/* 罫線と数字が接しないよう、値セル・見出しセルの左右に余白を確保する。
+   右余白が無いと、右寄せの数字が隣の列の左罫線に密着して読みにくくなる。 */
 .grid__head {
-  padding: 0 0 8px 20px;
-  font-size: 12px;
+  padding: 0 16px 10px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
   text-align: right;
@@ -183,10 +187,10 @@ body {
 
 /* 値は mono（数字が等幅）。項目名は日本語を含むため sans（SPEC §5.4） */
 .grid .value {
-  padding: 11px 0 11px 20px;
+  padding: 12px 16px;
   border-left: 1px solid var(--rule);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 16px;
   font-variant-numeric: tabular-nums;
   text-align: right;
   white-space: nowrap;
