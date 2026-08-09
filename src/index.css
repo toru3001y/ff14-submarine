@@ -1,0 +1,10 @@
+/* SPEC §5.5.3: レイアウト破綻を防ぐ基本実装として全要素に適用する */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
