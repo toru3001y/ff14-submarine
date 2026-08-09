@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#f7f6f0;font-family:'Zen Kaku Gothic New',system-ui,sans-serif}a{color:#2f6b4f}a:hover{color:#255741}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;justify-content:center">
+<div style="width:1040px;max-width:100%;padding:56px 64px 64px;color:#17201a;box-sizing:border-box">
+  <div style="display:flex;align-items:baseline;justify-content:space-between">
+    <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#2f6b4f">SUBMARINE PARTS CALCULATOR</div>
+    <div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8b9089">FINAL FANTASY XIV</div>
+  </div>
+  <h1 style="font:600 40px/1.25 'Shippori Mincho',serif;margin:14px 0 0;letter-spacing:.02em">FF14潜水艦パーツ<br>組み合わせ計算ツール</h1>
+  <div style="height:2px;background:#17201a;margin:36px 0 0"></div>
+  <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid #17201a;padding:28px 0;align-items:baseline">
+    <div>
+      <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#2f6b4f">01</div>
+      <div style="font:600 19px 'Shippori Mincho',serif;margin-top:6px">潜水艦ランク</div>
+    </div>
+    <div style="display:flex;align-items:baseline;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;align-items:baseline;gap:12px">
+        <label style="font-size:13px;font-weight:500;color:#525a53">ランク:</label>
+        <input type="text" placeholder="1-135" style="appearance:none;border:none;border-bottom:1px solid #17201a;background:transparent;font:500 20px 'Shippori Mincho',serif;width:110px;padding:4px 2px;color:#17201a;outline:none;border-radius:0" style-focus="border-bottom-color:#2f6b4f">
+        <span style="font:400 11px 'IBM Plex Mono',monospace;color:#8b9089">(1-135)</span>
+      </div>
+      <div style="font-size:12.5px;color:#8b9089;font-variant-numeric:tabular-nums">ランクボーナス: キャパシティ300, 探査+15, 収集+8, 巡航+20, 航続+12, 運+3</div>
+    </div>
+  </div>
+  <div style="padding:28px 0 0;border-bottom:1px solid #17201a">
+    <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#2f6b4f">02</div>
+    <div style="font:600 19px 'Shippori Mincho',serif;margin:6px 0 4px">パーツ選択</div>
+    <sc-for list="{{ parts }}" as="p" hint-placeholder-count="4">
+      <div style="display:grid;grid-template-columns:180px 1fr 370px;gap:24px;align-items:center;padding:18px 0;border-top:1px solid #dcded4">
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#8b9089">{{ p.num }}</span>
+          <span style="font:600 17px 'Shippori Mincho',serif">{{ p.name }}</span>
+        </div>
+        <div style="position:relative">
+          <select style="appearance:none;width:100%;border:none;border-bottom:1px solid #17201a;background:transparent;font:400 14px 'Zen Kaku Gothic New',sans-serif;padding:9px 26px 9px 2px;color:#525a53;border-radius:0;outline:none" style-focus="border-bottom-color:#2f6b4f">
+            <option>{{ p.ph }}</option>
+          </select>
+          <span style="position:absolute;right:4px;top:50%;transform:translateY(-55%);pointer-events:none;font-size:11px;color:#2f6b4f">▾</span>
+        </div>
+        <div style="font-size:12px;color:#8b9089;font-variant-numeric:tabular-nums;text-align:right">パーツ性能: コスト75, 探査+52, 収集+24, 巡航+33, 航続+26, 運+14</div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="padding:28px 0;border-bottom:1px solid #17201a">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#2f6b4f">03</div>
+      <div style="font:600 19px 'Shippori Mincho',serif">総合ステータス</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);margin-top:22px">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="6">
+        <div style="border-left:1px solid #dcded4;padding:2px 0 2px 20px">
+          <div style="font-size:12px;font-weight:500;color:#525a53">{{ s.label }}</div>
+          <div style="display:flex;align-items:baseline;gap:5px">
+            <span style="font:600 44px/1.2 'Shippori Mincho',serif;font-variant-numeric:tabular-nums;color:#2f6b4f">{{ s.value }}</span>
+            <sc-if value="{{ s.sub }}" hint-placeholder-val="{{ false }}"><span style="font:400 13px 'IBM Plex Mono',monospace;color:#8b9089">/{{ s.sub }}</span></sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:180px 1fr;padding:24px 0 0;align-items:baseline">
+    <div>
+      <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#2f6b4f">04</div>
+      <div style="font:600 16px 'Shippori Mincho',serif;margin-top:6px">選択中のパーツ構成</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+      <sc-for list="{{ parts }}" as="p" hint-placeholder-count="4">
+        <div style="font-size:13px;color:#525a53;border-bottom:1px solid #dcded4;padding-bottom:8px">{{ p.name }}: <span style="color:#aeb2a9">未選択</span></div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="display:flex;gap:14px;margin-top:44px">
+    <button style="appearance:none;border:1px solid #2f6b4f;background:#2f6b4f;color:#f7f6f0;font:500 13.5px 'Zen Kaku Gothic New',sans-serif;letter-spacing:.06em;padding:13px 30px;cursor:pointer" style-hover="background:#255741;border-color:#255741">Excelファイルをダウンロード</button>
+    <button style="appearance:none;border:1px solid #17201a;background:transparent;color:#17201a;font:500 13.5px 'Zen Kaku Gothic New',sans-serif;letter-spacing:.06em;padding:13px 30px;cursor:pointer" style-hover="background:#17201a10">選択をリセット</button>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const defs = [
+      ['艦体', '艦体を選択してください'],
+      ['艦尾', '艦尾を選択してください'],
+      ['艦首', '艦首を選択してください'],
+      ['艦橋', '艦橋を選択してください'],
+    ];
+    const parts = defs.map(([name, ph], i) => ({ name, ph, num: '0' + (i + 1) }));
+    const stats = [
+      { label: 'コスト', value: '285', sub: '300' },
+      { label: '探査', value: '210', sub: null },
+      { label: '収集', value: '98', sub: null },
+      { label: '巡航', value: '132', sub: null },
+      { label: '航続', value: '105', sub: null },
+      { label: '運', value: '57', sub: null },
+    ];
+    return { parts, stats };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+Use the claude_design MCP (https://api.anthropic.com/v1/design/mcp, auth via /design-login) to import this project:
+https://claude.ai/design/p/c119578b-a427-4b49-b5b9-2e834b35a49e?file=Submarine+Tool+Final+%282c+%E6%9D%BE%E8%91%89%29.dc.html
+
+Focus on these files (the whole project is readable):
+- `Submarine Tool Final (2c 松葉).dc.html`
+
+Also read these files the selection imports:
+- `support.js`
+
+Implement: `Submarine Tool Final (2c 松葉).dc.html`
