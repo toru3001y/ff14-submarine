@@ -51,7 +51,11 @@ export default function App() {
 
   return (
     <main className="page">
-      <h1 className="page__title">FF14 潜水艦パーツ組み合わせ計算ツール</h1>
+      <header className="page__header">
+        <p className="eyebrow">SUBMARINE PARTS CALCULATOR</p>
+        <p className="eyebrow eyebrow--secondary">FINAL FANTASY XIV</p>
+        <h1 className="page__title">FF14潜水艦パーツ組み合わせ計算ツール</h1>
+      </header>
 
       <section className="section" aria-labelledby="section-rank">
         <h2 className="section__title" id="section-rank">
@@ -99,11 +103,13 @@ export default function App() {
           <caption className="visually-hidden">部位ごとのパーツ選択と性能</caption>
           <thead>
             <tr>
-              <th className="visually-hidden" scope="col">
-                部位
+              {/* 列見出しは視覚的には不要だが、支援技術のために残す。
+                  th 自体を隠すと列数がずれるため、中身だけを隠す */}
+              <th scope="col">
+                <span className="visually-hidden">部位</span>
               </th>
-              <th className="visually-hidden" scope="col">
-                パーツ
+              <th scope="col">
+                <span className="visually-hidden">パーツ</span>
               </th>
               <th className="grid__head" scope="col">
                 {COST_LABEL}

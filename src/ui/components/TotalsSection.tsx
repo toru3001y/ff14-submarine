@@ -14,7 +14,7 @@ const HEADING_ID = 'section-totals'
  */
 export function TotalsSection({ totals }: { readonly totals: ViewModel['totals'] }) {
   return (
-    <section className="section" aria-labelledby={HEADING_ID}>
+    <section className="section section--totals" aria-labelledby={HEADING_ID}>
       <div className="section__head">
         <h2 className="section__title" id={HEADING_ID}>
           <span className="section__number" aria-hidden="true">

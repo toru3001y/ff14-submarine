@@ -1,4 +1,7 @@
-/* SPEC §5.5.3: レイアウト破綻を防ぐ基本実装として全要素に適用する */
+@import './ui/styles/tokens.css';
+
+/* SPEC §5.5.3: レイアウト破綻を防ぐ基本実装として全要素に適用する。
+   content-box のままだと width:100% に padding を足した要素が親からはみ出す。 */
 *,
 *::before,
 *::after {
@@ -7,4 +10,323 @@
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* SPEC §6 A5: フォーカス位置が明確に視認できるようにする。
+   下線色の変化のみに依存させず、形状の変化（outline）を伴わせる。 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- ページ（SPEC §5.5 PC レイアウト・幅960px以上） ---- */
+
+.page {
+  width: 1040px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 56px 64px 64px;
+}
+
+.page__header {
+  padding-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+}
+
+.eyebrow--secondary {
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.page__title {
+  margin: 14px 0 0;
+  font-family: var(--font-serif);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+/* ---- セクション ---- */
+
+/* セクション01・02 は「見出し列 / 内容列」の2列。境界線は --ink（SPEC §5.1） */
+.section {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  column-gap: 24px;
+  align-items: baseline;
+  padding: 28px 0;
+  border-top: 1px solid var(--ink);
+}
+
+.section > * {
+  grid-column: 2;
+}
+
+.section__title {
+  grid-column: 1;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.section__number {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+/* セクション03 は6列グリッドを幅いっぱいに使うため1列レイアウトにする */
+.section--totals {
+  display: block;
+}
+
+/* ---- 01 ランク入力（SPEC §3.1） ---- */
+
+.rank-field {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rank-field__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+/* 操作要素の境界を示す線には --rule を使わない（SPEC §5.1） */
+.rank-field__input {
+  width: 120px;
+  padding: 4px 2px;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.rank-field__input:focus {
+  border-bottom-color: var(--accent);
+}
+
+.rank-field__input[aria-invalid='true'] {
+  border-bottom-color: var(--danger);
+}
+
+.rank-field__error {
+  margin: 0;
+  min-height: 1.4em; /* 表示・非表示で高さが変わらないようにする */
+  font-size: 12.5px;
+  color: var(--danger);
+}
+
+/* ---- 6列ミニグリッド（SPEC §5.4） ---- */
+
+.grid {
+  width: 100%;
+  margin-top: 18px;
+  border-collapse: collapse;
+}
+
+.grid__head {
+  padding: 0 0 8px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* 値は mono（数字が等幅）。項目名は日本語を含むため sans（SPEC §5.4） */
+.grid .value {
+  padding: 11px 0 11px 20px;
+  border-left: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.grid tbody tr {
+  border-top: 1px solid var(--rule);
+}
+
+.grid__row-head {
+  padding: 11px 16px 11px 0;
+  text-align: left;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.grid__row-head label {
+  font-family: var(--font-serif);
+  font-size: 14px;
+}
+
+.grid__row-number {
+  margin-right: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.grid__control {
+  width: 280px;
+  padding: 11px 16px 11px 0;
+}
+
+/* SPEC §5.5.1: ネイティブの select をブラウザ標準の表示のまま用いる。
+   appearance:none を使わないため、枠線・矢印はブラウザの既定に任せる。 */
+.part-selector {
+  width: 100%;
+  max-width: 280px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+/* ---- 03 総合ステータス（SPEC §3.3） ---- */
+
+.section--totals .section__head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* 警告の有無で高さが変わらないこと（SPEC §3.4）。見出し行の空白を使う */
+.totals__warning {
+  margin: 0;
+  min-height: 1.4em;
+  margin-left: auto;
+  font-size: 12.5px;
+  color: var(--danger);
+  text-align: right;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin: 22px 0 0;
+}
+
+.totals__item {
+  padding: 2px 0 2px 20px;
+  border-left: 1px solid var(--rule);
+}
+
+.totals__term {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.totals__value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 2px 0 0;
+}
+
+.totals__value .value {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* コストの分母（キャパシティ）は補助表示（SPEC §3.3.4） */
+.totals__separator,
+.totals__value .value--muted {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.totals__separator {
+  margin-left: 2px;
+}
+
+/* ---- 色（SPEC §5.3） ---- */
+
+.value--ink {
+  color: var(--ink);
+}
+
+.value--accent {
+  color: var(--accent);
+}
+
+.value--danger {
+  color: var(--danger);
+}
+
+.value--muted {
+  color: var(--text-muted);
+}
+
+/* ---- ボタン ---- */
+
+.actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--ink);
+}
+
+/* 破壊的操作のため主ボタン（緑）にはせず、枠線スタイルとする（SPEC §5.5.1） */
+.button--outline {
+  padding: 13px 30px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.button--outline:hover {
+  background: var(--overlay-ink);
 }
