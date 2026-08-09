@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { CAPACITY_LABEL, COST_LABEL, SLOT_LABELS, STAT_LABELS } from '../domain/labels.ts'
+import { CAPACITY_LABEL, CAPACITY_LABEL_FULL, COST_LABEL, SLOT_LABELS, STAT_LABELS } from '../domain/labels.ts'
 import { findPartById } from '../domain/parts.ts'
 import { SLOTS, STAT_KEYS } from '../domain/types.ts'
 import type { Selections, Slot } from '../domain/types.ts'
@@ -79,7 +79,7 @@ export default function App() {
             <caption className="visually-hidden">ランクボーナス</caption>
             <thead>
               <tr>
-                <th className="grid__head" scope="col">
+                <th className="grid__head" scope="col" aria-label={CAPACITY_LABEL_FULL}>
                   {CAPACITY_LABEL}
                 </th>
                 <StatColumnHeaders />
@@ -107,8 +107,9 @@ export default function App() {
           <thead>
             <tr>
               {/* 列見出しは視覚的には不要だが、支援技術のために残す。
-                  th 自体を隠すと列数がずれるため、中身だけを隠す */}
-              <th scope="col">
+                  th 自体を隠すと列数がずれるため、中身だけを隠す。
+                  table-layout: fixed は最初の行のセル幅を見るため、列幅の指定はここで行う */}
+              <th className="grid__col-slot" scope="col">
                 <span className="visually-hidden">部位</span>
               </th>
               <th scope="col">

@@ -35,5 +35,11 @@ export const STAT_LABELS: Readonly<Record<StatKey, string>> = {
 /** コストの列見出し（セクション02・03） */
 export const COST_LABEL = 'コスト'
 
-/** キャパシティの列見出し（セクション01） */
-export const CAPACITY_LABEL = 'キャパシティ'
+/**
+ * キャパシティの列見出し（セクション01）。
+ *
+ * 「キャパシティ」のままだと他の項目名（2文字）と釣り合わず、この列だけが広くなるため
+ * 表示は短縮形にする。支援技術には CAPACITY_LABEL_FULL を aria-label で伝える。
+ */
+export const CAPACITY_LABEL = 'キャパ'
+export const CAPACITY_LABEL_FULL = 'キャパシティ'

@@ -40,7 +40,7 @@ body {
   width: 1040px;
   max-width: 100%;
   margin: 0 auto;
-  padding: 56px 64px 64px;
+  padding: 56px 48px 64px;
 }
 
 .page__header {
@@ -79,7 +79,7 @@ body {
    セクション内の要素の高さが不揃いに見える。上端で揃える。 */
 .section {
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 150px 1fr;
   column-gap: 24px;
   row-gap: 20px;
   align-items: start;
@@ -174,22 +174,32 @@ body {
 /* ---- 6列ミニグリッド（SPEC §5.4） ---- */
 
 .grid {
+  /* 値の6列の幅（SPEC §5.4 の6列ミニグリッド）。01・02 で共通にする */
+  --grid-col-width: 68px;
   width: 100%;
   border-collapse: collapse;
 }
 
 /* 01 のランクボーナスは行見出し・セレクトの列を持たないため、幅いっぱいに広げると
-   左に空白が生まれ、1列目の左罫線が浮いて見える。内容幅にして右へ寄せ、
-   02 の値列と右端を揃える。 */
+   左に空白が生まれ、1列目の左罫線が浮いて見える。6列分の幅にして右へ寄せ、
+   02 の値列と右端を揃える。table-layout: fixed を効かせるため width を明示する。 */
 .grid--bonus {
-  width: auto;
+  width: calc(var(--grid-col-width) * 6);
+  table-layout: fixed;
   margin-left: auto;
 }
 
 /* 罫線と数字が接しないよう、値セル・見出しセルの左右に余白を確保する。
    右余白が無いと、右寄せの数字が隣の列の左罫線に密着して読みにくくなる。 */
+/* 値の6列は固定幅で揃える。内容任せにすると項目名の長さや値の桁数で列幅が変わり、
+   「運」だけ狭い・未選択のときだけ幅が違う、といったばらつきが出る */
+.grid .value,
 .grid__head {
-  padding: 8px 16px;
+  width: var(--grid-col-width);
+}
+
+.grid__head {
+  padding: 8px 12px;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
@@ -213,7 +223,7 @@ body {
 
 /* 値は mono（数字が等幅）。項目名は日本語を含むため sans（SPEC §5.4） */
 .grid .value {
-  padding: 12px 16px;
+  padding: 12px;
   border-left: 1px solid var(--rule);
   font-family: var(--font-mono);
   font-size: 16px;
@@ -247,8 +257,19 @@ body {
   color: var(--text-muted);
 }
 
+/* 自動レイアウトだと、幅が足りないときに端数が最後の列（運）へ寄せられて
+   その列だけ狭くなる。固定レイアウトにして値の6列を確実に等幅にする。
+   幅を指定しない .grid__control が残りを引き受ける。 */
+.grid--parts {
+  table-layout: fixed;
+}
+
+/* 部位名の列だけ幅を決め、幅を指定しないセレクトの列が残りを引き受ける */
+.grid--parts .grid__col-slot {
+  width: 80px;
+}
+
 .grid__control {
-  width: 280px;
   padding: 11px 16px 11px 0;
 }
 
