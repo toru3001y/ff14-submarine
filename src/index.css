@@ -1,0 +1,394 @@
+@import './ui/styles/tokens.css';
+
+/* SPEC §5.5.3: レイアウト破綻を防ぐ基本実装として全要素に適用する。
+   content-box のままだと width:100% に padding を足した要素が親からはみ出す。 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* SPEC §6 A5: フォーカス位置が明確に視認できるようにする。
+   下線色の変化のみに依存させず、形状の変化（outline）を伴わせる。 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- ページ（SPEC §5.5 PC レイアウト・幅960px以上） ---- */
+
+.page {
+  width: 1040px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 56px 48px 64px;
+}
+
+.page__header {
+  padding-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+}
+
+.eyebrow--secondary {
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.page__title {
+  margin: 14px 0 0;
+  font-family: var(--font-serif);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+/* ---- セクション ---- */
+
+/* セクション01・02 は「見出し列 / 内容列」の2列。境界線は --ink（SPEC §5.1） */
+/* baseline で揃えると、左の見出しが右側の表のベースラインに引っ張られて下がり、
+   セクション内の要素の高さが不揃いに見える。上端で揃える。 */
+.section {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  column-gap: 24px;
+  row-gap: 20px;
+  align-items: start;
+  padding: 28px 0;
+  border-top: 1px solid var(--ink);
+}
+
+.section > * {
+  grid-column: 2;
+}
+
+.section__title {
+  grid-column: 1;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.section__number {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+/* セクション03 は6列グリッドを幅いっぱいに使うため1列レイアウトにする */
+.section--totals {
+  display: block;
+}
+
+/* ---- 01 ランク入力（SPEC §3.1） ---- */
+
+/* ランク入力とランクボーナスを横一列に並べ、上端を揃える */
+.section__body {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.rank-field {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 12px;
+  align-items: baseline;
+}
+
+.rank-field__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+/* 操作要素の境界を示す線には --rule を使わない（SPEC §5.1） */
+.rank-field__input {
+  width: 120px;
+  padding: 4px 2px;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.rank-field__input:focus {
+  border-bottom-color: var(--accent);
+}
+
+.rank-field__input[aria-invalid='true'] {
+  border-bottom-color: var(--danger);
+}
+
+/* エラーは入力欄の下に置く。2行分の高さを常に確保し、
+   表示・非表示でレイアウトが跳ねないようにする */
+.rank-field__error {
+  grid-column: 2;
+  margin: 4px 0 0;
+  max-width: 200px;
+  min-height: 2.6em;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: var(--danger);
+}
+
+/* ---- 6列ミニグリッド（SPEC §5.4） ---- */
+
+.grid {
+  /* 値の6列の幅（SPEC §5.4 の6列ミニグリッド）。01・02 で共通にする */
+  --grid-col-width: 68px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* 01 のランクボーナスは行見出し・セレクトの列を持たないため、幅いっぱいに広げると
+   左に空白が生まれ、1列目の左罫線が浮いて見える。6列分の幅にして右へ寄せ、
+   02 の値列と右端を揃える。table-layout: fixed を効かせるため width を明示する。 */
+.grid--bonus {
+  width: calc(var(--grid-col-width) * 6);
+  table-layout: fixed;
+  margin-left: auto;
+}
+
+/* 罫線と数字が接しないよう、値セル・見出しセルの左右に余白を確保する。
+   右余白が無いと、右寄せの数字が隣の列の左罫線に密着して読みにくくなる。 */
+/* 値の6列は固定幅で揃える。内容任せにすると項目名の長さや値の桁数で列幅が変わり、
+   「運」だけ狭い・未選択のときだけ幅が違う、といったばらつきが出る */
+.grid .value,
+.grid__head {
+  width: var(--grid-col-width);
+}
+
+.grid__head {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  /* 値は桁を揃えるため右寄せ、項目名は列の中央に置く */
+  text-align: center;
+  /* 幅が詰まったとき「コ ス ト」のように縦に折り返さないようにする */
+  white-space: nowrap;
+  /* 項目名の行もグリッドに含める。部位名・セレクトの列には罫線を引かない */
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+
+/* 左端（コスト／キャパシティの左）・右端（運の右）・下端（艦橋の下）を閉じる */
+.grid__head:last-child,
+.grid .value:last-child {
+  border-right: 1px solid var(--rule);
+}
+
+.grid tbody tr:last-child .value {
+  border-bottom: 1px solid var(--rule);
+}
+
+/* 値は mono（数字が等幅）。項目名は日本語を含むため sans（SPEC §5.4） */
+.grid .value {
+  padding: 12px;
+  border-left: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.grid tbody tr {
+  border-top: 1px solid var(--rule);
+}
+
+.grid__row-head {
+  padding: 11px 16px 11px 0;
+  text-align: left;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.grid__row-head label {
+  font-family: var(--font-serif);
+  font-size: 14px;
+}
+
+.grid__row-number {
+  margin-right: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+/* 自動レイアウトだと、幅が足りないときに端数が最後の列（運）へ寄せられて
+   その列だけ狭くなる。固定レイアウトにして値の6列を確実に等幅にする。
+   幅を指定しない .grid__control が残りを引き受ける。 */
+.grid--parts {
+  table-layout: fixed;
+}
+
+/* 部位名の列だけ幅を決め、幅を指定しないセレクトの列が残りを引き受ける */
+.grid--parts .grid__col-slot {
+  width: 80px;
+}
+
+.grid__control {
+  padding: 11px 16px 11px 0;
+}
+
+/* SPEC §5.5.1: ネイティブの select をブラウザ標準の表示のまま用いる。
+   appearance:none を使わないため、枠線・矢印はブラウザの既定に任せる。 */
+.part-selector {
+  width: 100%;
+  max-width: 280px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+/* ---- 03 総合ステータス（SPEC §3.3） ---- */
+
+.section--totals .section__head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* 警告の有無で高さが変わらないこと（SPEC §3.4）。見出し行の空白を使う */
+.totals__warning {
+  margin: 0;
+  min-height: 1.4em;
+  margin-left: auto;
+  font-size: 12.5px;
+  color: var(--danger);
+  text-align: right;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin: 22px 0 0;
+}
+
+.totals__item {
+  padding: 2px 0 2px 20px;
+  border-left: 1px solid var(--rule);
+}
+
+.totals__term {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.totals__value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 2px 0 0;
+}
+
+.totals__value .value {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* コストの分母（キャパシティ）は補助表示（SPEC §3.3.4） */
+.totals__separator,
+.totals__value .value--muted {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.totals__separator {
+  margin-left: 2px;
+}
+
+/* ---- 色（SPEC §5.3） ---- */
+
+.value--ink {
+  color: var(--ink);
+}
+
+.value--accent {
+  color: var(--accent);
+}
+
+.value--danger {
+  color: var(--danger);
+}
+
+.value--muted {
+  color: var(--text-muted);
+}
+
+/* ---- ボタン ---- */
+
+.actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--ink);
+}
+
+/* 破壊的操作のため主ボタン（緑）にはせず、枠線スタイルとする（SPEC §5.5.1） */
+.button--outline {
+  padding: 13px 30px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.button--outline:hover {
+  background: var(--overlay-ink);
+}
