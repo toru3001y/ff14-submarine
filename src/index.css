@@ -207,7 +207,8 @@ body {
   text-align: center;
   /* 幅が詰まったとき「コ ス ト」のように縦に折り返さないようにする */
   white-space: nowrap;
-  /* 項目名の行もグリッドに含める。部位名・セレクトの列には罫線を引かない */
+  /* 項目名の行もグリッドに含める。見出し行のうち部位名・パーツの2列は
+     中身のない列であり、囲むと空の枠が2つ並んで見えるため罫線を引かない */
   border-top: 1px solid var(--rule);
   border-left: 1px solid var(--rule);
 }
@@ -238,7 +239,8 @@ body {
 }
 
 .grid__row-head {
-  padding: 11px 16px 11px 0;
+  /* 左パディングは左辺の罫線と部位番号を離すためのもの。0 だと罫線に密着して読みにくい */
+  padding: 11px 16px 11px 12px;
   text-align: left;
   font-weight: 500;
   white-space: nowrap;
@@ -265,13 +267,27 @@ body {
   table-layout: fixed;
 }
 
-/* 部位名の列だけ幅を決め、幅を指定しないセレクトの列が残りを引き受ける */
+/* 部位名の列だけ幅を決め、幅を指定しないセレクトの列が残りを引き受ける。
+   .grid__row-head の左パディング 12px を足した分だけ広げ、部位名と右隣の列との
+   間隔（28px）を変えずに保つ */
 .grid--parts .grid__col-slot {
-  width: 80px;
+  width: 92px;
 }
 
 .grid__control {
   padding: 11px 16px 11px 0;
+}
+
+/* 02 の部位名・セレクトの列も表の一部として閉じる（指摘4回目）。
+   行区切りの横線は .grid tbody tr の border-top によってすでに左端まで引かれているため、
+   足りないのは左辺（本文4行分）と下辺（艦橋の下）の2本だけである。 */
+.grid--parts tbody .grid__row-head {
+  border-left: 1px solid var(--rule);
+}
+
+.grid--parts tbody tr:last-child .grid__row-head,
+.grid--parts tbody tr:last-child .grid__control {
+  border-bottom: 1px solid var(--rule);
 }
 
 /* SPEC §5.5.1: ネイティブの select をブラウザ標準の表示のまま用いる。
